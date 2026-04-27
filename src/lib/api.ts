@@ -58,6 +58,10 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ finalText }),
     }),
+  markReviewRequired: (id: string) =>
+    request<Inquiry>(`/api/inquiries/${id}/review-required`, {
+      method: 'POST',
+    }),
   listLogs: (query?: string) => request<LogEvent[]>(withQuery('/api/logs', { query })),
   listDocuments: () => request<KnowledgeDocument[]>('/api/documents'),
   uploadDocument: (payload: { title: string; type: DocumentType; fileName: string }) =>

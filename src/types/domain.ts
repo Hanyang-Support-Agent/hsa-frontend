@@ -19,6 +19,7 @@ export type LogEventType =
   | 'auto_replied'
   | 'draft_generated'
   | 'draft_saved'
+  | 'review_required'
   | 'response_sent'
   | 'document_uploaded'
   | 'document_deleted';
@@ -56,6 +57,7 @@ export interface Inquiry {
   summary: string;
   body: string;
   receivedAt: string;
+  confidenceScore: number;
   orderId?: string;
   autoReplyText?: string;
   draft?: ResponseDraft;

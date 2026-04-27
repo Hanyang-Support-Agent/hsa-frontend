@@ -1,70 +1,129 @@
+import type { ReactNode } from 'react';
 import {
-  channelLabels,
-  inquiryStatusLabels,
-  inquiryTypeLabels,
-  processingModeLabels,
-  type Channel,
-  type InquiryStatus,
-  type InquiryType,
-  type ProcessingMode,
+  channelMeta,
+  documentStatusMeta,
+  documentTypeMeta,
+  inquiryTypeMeta,
+  processingModeMeta,
+  statusMeta,
+  type VisualMeta,
+} from '../lib/meta';
+import type {
+  Channel,
+  DocumentStatus,
+  DocumentType,
+  InquiryStatus,
+  InquiryType,
+  ProcessingMode,
 } from '../types/domain';
 import { cx } from '../lib/format';
 
-type BadgeTone = 'gray' | 'green' | 'blue' | 'amber' | 'red' | 'purple';
+type Tone = 'neutral' | 'info' | 'success' | 'warn' | 'danger' | 'violet';
 
-const toneClasses: Record<BadgeTone, string> = {
-  gray: 'bg-ink-100 text-ink-700',
-  green: 'bg-brand-50 text-brand-700',
-  blue: 'bg-blue-50 text-blue-600',
-  amber: 'bg-amber-50 text-amber-600',
-  red: 'bg-red-50 text-red-600',
-  purple: 'bg-violet-50 text-violet-700',
+const toneMeta: Record<Tone, { wash: string; ink: string; dot: string }> = {
+  neutral: { wash: 'bg-ink-100', ink: 'text-ink-700', dot: 'bg-ink-400' },
+  info: { wash: 'bg-info-50', ink: 'text-info-700', dot: 'bg-info-500' },
+  success: { wash: 'bg-brand-50', ink: 'text-brand-700', dot: 'bg-brand-500' },
+  warn: { wash: 'bg-warn-50', ink: 'text-warn-700', dot: 'bg-warn-500' },
+  danger: { wash: 'bg-danger-50', ink: 'text-danger-700', dot: 'bg-danger-500' },
+  violet: { wash: 'bg-violet-50', ink: 'text-violet-600', dot: 'bg-violet-500' },
 };
 
-const statusTone: Record<InquiryStatus, BadgeTone> = {
-  received: 'gray',
-  classified: 'blue',
-  auto_replied: 'green',
-  draft_ready: 'blue',
-  review_required: 'amber',
-  saved: 'purple',
-  sent: 'green',
-  failed: 'red',
-};
+interface BasePillProps {
+  label: ReactNode;
+  meta?: VisualMeta;
+  tone?: Tone;
+  withDot?: boolean;
+  size?: 'xs' | 'sm';
+  className?: string;
+}
 
-const channelTone: Record<Channel, BadgeTone> = {
-  kakao: 'green',
-  instagram: 'purple',
-  email: 'blue',
-};
-
-const typeTone: Record<InquiryType, BadgeTone> = {
-  shipping: 'blue',
-  exchange_refund: 'amber',
-  product: 'green',
-  other: 'gray',
-};
-
-export function Badge({ label, tone = 'gray' }: { label: string; tone?: BadgeTone }) {
+export function Pill({
+  label,
+  meta,
+  tone = 'neutral',
+  withDot = true,
+  size = 'sm',
+  className,
+}: BasePillProps) {
+  const wash = meta?.wash ?? toneMeta[tone].wash;
+  const ink = meta?.ink ?? toneMeta[tone].ink;
+  const dot = meta?.dot ?? toneMeta[tone].dot;
   return (
-    <span className={cx('inline-flex items-center rounded-full px-2.5 py-1 text-xs font-bold', toneClasses[tone])}>
+    <span
+      className={cx(
+        'inline-flex items-center gap-1.5 rounded-full border border-white/70 font-semibold tracking-tight whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.62)]',
+        size === 'xs' ? 'h-5 px-2 text-[11px]' : 'h-6 px-2.5 text-xs',
+        wash,
+        ink,
+        className,
+      )}
+    >
+      {withDot && <span className={cx('h-1.5 w-1.5 shrink-0 rounded-full', dot)} />}
       {label}
     </span>
   );
 }
 
-export function StatusBadge({ status }: { status: InquiryStatus }) {
-  return <Badge label={inquiryStatusLabels[status]} tone={statusTone[status]} />;
+export function StatusBadge({ status, size = 'sm' }: { status: InquiryStatus; size?: 'xs' | 'sm' }) {
+  const meta = statusMeta[status];
+  return <Pill label={meta.label} meta={meta} size={size} />;
 }
 
-export function ChannelBadge({ channel }: { channel: Channel }) {
-  return <Badge label={channelLabels[channel]} tone={channelTone[channel]} />;
+export function ChannelBadge({ channel, size = 'sm' }: { channel: Channel; size?: 'xs' | 'sm' }) {
+  const meta = channelMeta[channel];
+  return <Pill label={meta.label} meta={meta} size={size} />;
 }
 
-export function InquiryTypeBadge({ type }: { type: InquiryType }) {
-  return <Badge label={inquiryTypeLabels[type]} tone={typeTone[type]} />;
+export function InquiryTypeBadge({ type, size = 'sm' }: { type: InquiryType; size?: 'xs' | 'sm' }) {
+  const meta = inquiryTypeMeta[type];
+  return <Pill label={meta.label} meta={meta} size={size} />;
 }
 
-export function ProcessingBadge({ mode }: { mode: ProcessingMode }) {
-  return <Badge label={processingModeLabels[mode]} tone={mode === 'auto_reply' ? 'green' : mode === 'draft_review' ? 'amber' : 'gray'} />;
+export function ProcessingBadge({ mode, size = 'sm' }: { mode: ProcessingMode; size?: 'xs' | 'sm' }) {
+  const meta = processingModeMeta[mode];
+  return <Pill label={meta.label} meta={meta} size={size} />;
+}
+
+export function DocumentTypeBadge({ type, size = 'sm' }: { type: DocumentType; size?: 'xs' | 'sm' }) {
+  const meta = documentTypeMeta[type];
+  return <Pill label={meta.label} meta={meta} size={size} />;
+}
+
+export function DocumentStatusBadge({ status, size = 'sm' }: { status: DocumentStatus; size?: 'xs' | 'sm' }) {
+  const meta = documentStatusMeta[status];
+  return <Pill label={meta.label} meta={meta} size={size} />;
+}
+
+/** Channel signature mark — uses brand-recognizable colour blocks. */
+export function ChannelMark({ channel, size = 'md' }: { channel: Channel; size?: 'sm' | 'md' | 'lg' }) {
+  const dim = size === 'sm' ? 'h-6 w-6 text-[11px]' : size === 'lg' ? 'h-10 w-10 text-base' : 'h-8 w-8 text-xs';
+  if (channel === 'kakao') {
+    return (
+      <span className={cx('inline-flex items-center justify-center rounded-lg bg-[#FEE500] font-black text-[#181600] shadow-sm ring-1 ring-black/5', dim)}>
+        K
+      </span>
+    );
+  }
+  if (channel === 'instagram') {
+    return (
+      <span
+        className={cx(
+          'inline-flex items-center justify-center rounded-lg font-black text-white shadow-sm ring-1 ring-white/40',
+          dim,
+        )}
+        style={{
+          background:
+            'linear-gradient(135deg, #f58529 0%, #dd2a7b 50%, #8134af 100%)',
+        }}
+      >
+        IG
+      </span>
+    );
+  }
+  return (
+    <span className={cx('inline-flex items-center justify-center rounded-lg bg-info-100 font-black text-info-700 shadow-sm ring-1 ring-info-100', dim)}>
+      @
+    </span>
+  );
 }

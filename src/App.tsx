@@ -39,7 +39,14 @@ export default function App() {
   }, []);
 
   if (isLoading) {
-    return <div className="flex min-h-screen items-center justify-center text-sm font-bold text-ink-500">콘솔을 불러오는 중입니다...</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-bg">
+        <div className="flex items-center gap-3 text-sm text-ink-500">
+          <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-r-transparent" />
+          콘솔 준비 중…
+        </div>
+      </div>
+    );
   }
 
   return (

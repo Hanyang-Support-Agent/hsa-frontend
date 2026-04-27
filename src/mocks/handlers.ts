@@ -41,6 +41,17 @@ function inferType(body: string): InquiryType {
   return 'other';
 }
 
+function confidenceFor(type: InquiryType, body: string) {
+  const lengthBonus = Math.min(body.length / 300, 0.08);
+  const base: Record<InquiryType, number> = {
+    shipping: 0.91,
+    exchange_refund: 0.88,
+    product: 0.86,
+    other: 0.62,
+  };
+  return Number(Math.min(base[type] + lengthBonus, 0.97).toFixed(2));
+}
+
 function createDraft(inquiry: Inquiry) {
   if (inquiry.type === 'shipping' && inquiry.orderId) {
     return undefined;
@@ -167,6 +178,26 @@ export const handlers = [
 
     return HttpResponse.json(inquiry);
   }),
+  http.post('/api/inquiries/:id/review-required', ({ params }) => {
+    const inquiry = inquiries.find((item) => item.id === params.id);
+    if (!inquiry) return new HttpResponse(null, { status: 404 });
+
+    const previousStatus = inquiry.status;
+    inquiry.status = 'review_required';
+
+    appendLog({
+      inquiryId: inquiry.id,
+      eventType: 'review_required',
+      channel: inquiry.channel,
+      inquiryType: inquiry.type,
+      processingMode: inquiry.processingMode,
+      previousStatus,
+      nextStatus: 'review_required',
+      message: '관리자가 해당 문의를 검토 필요 상태로 표시했습니다.',
+    });
+
+    return HttpResponse.json(inquiry);
+  }),
   http.get('/api/logs', ({ request }) => {
     const url = new URL(request.url);
     const query = url.searchParams.get('query')?.trim().toLowerCase();
@@ -229,6 +260,7 @@ export const handlers = [
       summary: body.message.slice(0, 38),
       body: body.message,
       receivedAt: now(),
+      confidenceScore: confidenceFor(type, body.message),
       orderId: body.orderId,
       autoReplyText: canAutoReply ? '현재 주문은 배송 중이며 예상 도착일은 1~3영업일 내입니다.' : undefined,
     };
