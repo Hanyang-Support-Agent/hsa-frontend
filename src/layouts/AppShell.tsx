@@ -36,7 +36,7 @@ const navItems: NavItem[] = [
       items.filter((i) => ['review_required', 'draft_ready', 'classified', 'received'].includes(i.status)).length,
     countTone: 'warn',
   },
-  { to: '/logs', label: '로그 조회', icon: ScrollText, group: 'main' },
+  { to: '/logs', label: '처리 기록', icon: ScrollText, group: 'main' },
   { to: '/documents', label: '문서 관리', icon: FileText, group: 'main' },
   { to: '/dev/intake', label: '문의 주입', icon: TerminalSquare, group: 'dev' },
 ];
@@ -248,7 +248,7 @@ function NavItemLink({ item, inquiries }: { item: NavItem; inquiries: Inquiry[] 
 function getPageTitle(pathname: string) {
   if (pathname.startsWith('/inquiries/') && pathname !== '/inquiries') return '문의 상세 검토';
   if (pathname.startsWith('/inquiries')) return '문의 처리함';
-  if (pathname.startsWith('/logs')) return '감사 로그';
+  if (pathname.startsWith('/logs')) return '처리 기록';
   if (pathname.startsWith('/documents')) return '지식 문서';
   if (pathname.startsWith('/dev/intake')) return 'Mock 문의 주입';
   return '운영 대시보드';

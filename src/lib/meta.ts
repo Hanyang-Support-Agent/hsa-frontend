@@ -84,9 +84,9 @@ export const inquiryTypeMeta: Record<InquiryType, VisualMeta> = {
 export const statusMeta: Record<InquiryStatus, VisualMeta> = {
   received: {
     label: '접수',
-    dot: 'bg-ink-400',
-    wash: 'bg-ink-100',
-    ink: 'text-ink-700',
+    dot: 'bg-info-500',
+    wash: 'bg-info-50',
+    ink: 'text-info-700',
   },
   classified: {
     label: '분류완료',
@@ -102,15 +102,15 @@ export const statusMeta: Record<InquiryStatus, VisualMeta> = {
   },
   draft_ready: {
     label: '초안완료',
-    dot: 'bg-violet-500',
-    wash: 'bg-violet-50',
-    ink: 'text-violet-600',
-  },
-  review_required: {
-    label: '검토필요',
     dot: 'bg-warn-500',
     wash: 'bg-warn-50',
     ink: 'text-warn-700',
+  },
+  review_required: {
+    label: '검토필요',
+    dot: 'bg-danger-500',
+    wash: 'bg-danger-50',
+    ink: 'text-danger-700',
   },
   saved: {
     label: '임시저장',

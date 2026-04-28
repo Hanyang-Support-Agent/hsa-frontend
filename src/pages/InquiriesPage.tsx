@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Filter, Search, SortDesc, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight, Filter, Search, SortDesc, X } from 'lucide-react';
 import { api } from '../lib/api';
 import type { Channel, Inquiry, InquiryStatus, InquiryType } from '../types/domain';
 import { Card } from '../components/Card';
-import { Cell, Row, Table } from '../components/Table';
 import {
   ChannelMark,
   InquiryTypeBadge,
@@ -15,9 +14,8 @@ import { FilterChip, Input } from '../components/FormControls';
 import { EmptyState } from '../components/EmptyState';
 import { PageHeader } from '../components/PageHeader';
 import { Skeleton } from '../components/Skeleton';
-import { Avatar } from '../components/Avatar';
 import { Kbd } from '../components/Kbd';
-import { cx, formatRelativeTime, truncate } from '../lib/format';
+import { cx, formatRelativeTime } from '../lib/format';
 import {
   channelMeta,
   inquiryTypeMeta,
@@ -95,11 +93,11 @@ export function InquiriesPage() {
       <PageHeader
         eyebrow={
           <>
-            <Filter className="h-3 w-3" /> Inbox
+            <Filter className="h-3 w-3" /> Review Inbox
           </>
         }
-        title="문의 처리함"
-        description="무엇이 들어왔는지, AI가 어떻게 분류했는지, 지금 자동 처리인지 검토 대상인지 빠르게 판단합니다."
+        title="AI 검토함"
+        description="검토가 필요한 문의부터 빠르게 확인하고 응답을 마무리하세요."
       />
 
       {/* Filter bar */}
@@ -200,28 +198,40 @@ export function InquiriesPage() {
       <Card
         flush
         title={
-          <span className="flex items-center gap-2">
-            결과
-            <span className="rounded-full bg-ink-100 px-2 py-0.5 text-xs font-semibold tabular text-ink-700">
-              {filtered.length}
+          <div>
+            <span className="flex items-center gap-2">
+              Review Queue
+              <span className="rounded-full bg-ink-100 px-2 py-0.5 text-xs font-semibold tabular text-ink-700">
+                {filtered.length}
+              </span>
             </span>
-          </span>
+            <p className="mt-1 text-xs font-normal text-ink-500">
+              현재 조건에 맞는 문의 {filtered.length}건
+            </p>
+          </div>
         }
         action={
-          <button
-            type="button"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-500 hover:text-ink-900"
-          >
-            <SortDesc className="h-3.5 w-3.5" /> 최신순
-          </button>
+          <div className="flex items-center gap-2">
+            <span className="inline-flex h-7 items-center gap-1.5 rounded-full border border-line bg-surface-muted px-2.5 text-[11px] font-semibold text-ink-600">
+              <SortDesc className="h-3.5 w-3.5" />
+              우선순위순
+            </span>
+            <span className="hidden h-7 items-center gap-1.5 rounded-full border border-line bg-white px-2.5 text-[11px] font-semibold text-ink-500 xl:inline-flex">
+              <Kbd>J</Kbd>/<Kbd>K</Kbd> 이동 · <Kbd>↵</Kbd> 열기 · <Kbd>/</Kbd> 검색
+            </span>
+          </div>
         }
       >
         {isLoading ? (
-          <div className="divide-y divide-line">
+          <div className="space-y-3 p-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="flex items-center gap-3 px-4 py-3">
-                <Skeleton className="h-8 w-8 rounded-md" />
-                <Skeleton className="h-3.5 flex-1" />
+              <div key={i} className="flex items-center gap-3 rounded-xl border border-line bg-white/80 px-4 py-4">
+                <Skeleton className="h-10 w-10 rounded-lg" />
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-3.5 w-1/3" />
+                  <Skeleton className="h-3 w-2/3" />
+                </div>
+                <Skeleton className="h-8 w-24 rounded-lg" />
               </div>
             ))}
           </div>
@@ -234,128 +244,157 @@ export function InquiriesPage() {
             />
           </div>
         ) : (
-          <Table
-            headers={[
-              { label: '유입 문의', width: '40%' },
-              { label: 'AI 분류', width: '150px' },
-              { label: '신뢰도', width: '120px' },
-              { label: '처리 상태', width: '150px' },
-              { label: '다음 액션', width: '150px' },
-              { label: '접수', width: '110px', align: 'right' },
-            ]}
-          >
-            {filtered.map((inquiry, idx) => (
-              <Row
-                key={inquiry.id}
-                clickable
-                selected={idx === focusIdx}
-                onClick={() => navigate(`/inquiries/${inquiry.id}`)}
-                onMouseEnter={() => setFocusIdx(idx)}
-              >
-                <Cell className="relative">
-                  {/* priority indicator */}
-                  <span
-                    className={cx(
-                      'absolute inset-y-0 left-0 w-0.5',
-                      statusMeta[inquiry.status].dot,
-                    )}
-                  />
-                  <div className="flex min-w-0 items-center gap-3 pl-2">
-                    <ChannelMark channel={inquiry.channel} size="md" />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-1.5">
-                        <Link
-                          to={`/inquiries/${inquiry.id}`}
-                          className="truncate text-sm font-semibold text-ink-900 hover:text-brand-700"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {inquiry.summary}
-                        </Link>
-                        <span className="font-mono text-[10.5px] text-ink-400">
-                          {inquiry.id.slice(-7)}
-                        </span>
-                      </div>
-                      <p className="mt-0.5 flex items-center gap-1.5 truncate text-xs text-ink-500">
-                        <Avatar name={inquiry.customer.name} size="sm" className="!h-4 !w-4 !text-[9px]" />
-                        <span className="font-medium text-ink-700">{inquiry.customer.name}</span>
-                        <span>·</span>
-                        <span className="truncate">{truncate(inquiry.body, 80)}</span>
-                      </p>
-                    </div>
-                  </div>
-                </Cell>
-                <Cell>
-                  <div className="space-y-1.5">
-                    <InquiryTypeBadge type={inquiry.type} size="xs" />
-                    <p className="text-[11px] leading-snug text-ink-500">
-                      {classificationCopy(inquiry.type)}
-                    </p>
-                  </div>
-                </Cell>
-                <Cell>
-                  <ConfidenceMeter value={inquiry.confidenceScore} />
-                </Cell>
-                <Cell>
-                  <div className="flex flex-col items-start gap-1.5">
-                    <StatusBadge status={inquiry.status} size="xs" />
-                    <ProcessingBadge mode={inquiry.processingMode} size="xs" />
-                  </div>
-                </Cell>
-                <Cell>
-                  <NextAction status={inquiry.status} />
-                </Cell>
-                <Cell align="right" className="tabular text-xs text-ink-500">
-                  {formatRelativeTime(inquiry.receivedAt)}
-                </Cell>
-              </Row>
-            ))}
-          </Table>
+          <div className="p-4">
+            <div className="grid grid-cols-[minmax(360px,1.45fr)_180px_140px_150px_170px_90px] gap-3 px-4 pb-2 text-[11px] font-bold uppercase tracking-[0.08em] text-ink-400">
+              <span>문의</span>
+              <span>AI 판단</span>
+              <span>신뢰도</span>
+              <span>상태</span>
+              <span>다음 액션</span>
+              <span className="text-right">대기</span>
+            </div>
+            <div className="space-y-2.5">
+              {filtered.map((inquiry, idx) => (
+                <InquiryQueueRow
+                  key={inquiry.id}
+                  inquiry={inquiry}
+                  selected={idx === focusIdx}
+                  onFocus={() => setFocusIdx(idx)}
+                  onOpen={() => navigate(`/inquiries/${inquiry.id}`)}
+                />
+              ))}
+            </div>
+          </div>
         )}
       </Card>
     </div>
   );
 }
 
-function ConfidenceMeter({ value }: { value: number }) {
+function InquiryQueueRow({
+  inquiry,
+  selected,
+  onFocus,
+  onOpen,
+}: {
+  inquiry: Inquiry;
+  selected?: boolean;
+  onFocus: () => void;
+  onOpen: () => void;
+}) {
+  const action = nextActionCopy(inquiry);
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      onMouseEnter={onFocus}
+      className={cx(
+        'group relative grid w-full grid-cols-[minmax(360px,1.45fr)_180px_140px_150px_170px_90px] items-center gap-3 rounded-2xl border bg-white/86 px-4 py-3.5 text-left shadow-xs backdrop-blur transition hover:-translate-y-0.5 hover:border-brand-100 hover:shadow-md',
+        selected ? 'border-brand-100 ring-1 ring-brand-100' : 'border-line',
+      )}
+    >
+      <span className={cx('absolute inset-y-4 left-0 w-1 rounded-r-full', statusMeta[inquiry.status].dot)} />
+      <div className="flex min-w-0 items-center gap-3 pl-2">
+        <ChannelMark channel={inquiry.channel} size="md" />
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <p className="truncate text-sm font-bold text-ink-900 group-hover:text-brand-800">
+              {inquiry.summary}
+            </p>
+            <span className="font-mono text-[10.5px] text-ink-400">{inquiry.id}</span>
+          </div>
+          <p className="mt-1 truncate text-xs leading-snug text-ink-500">
+            <span className="font-semibold text-ink-700">{inquiry.customer.name} 고객</span>
+            <span className="mx-1.5 text-ink-300">·</span>
+            {inquiryListSummary(inquiry)}
+          </p>
+        </div>
+      </div>
+      <div className="min-w-0 space-y-1.5">
+        <InquiryTypeBadge type={inquiry.type} size="xs" />
+        <p className="truncate text-[11px] font-medium leading-snug text-ink-500">
+          {classificationCopy(inquiry)}
+        </p>
+      </div>
+      <ConfidenceMeter inquiry={inquiry} />
+      <div className="flex flex-col items-start gap-1.5">
+        <StatusBadge status={inquiry.status} size="xs" />
+        <ProcessingBadge mode={inquiry.processingMode} size="xs" />
+      </div>
+      <span className={cx('inline-flex h-8 items-center justify-center gap-1.5 rounded-lg px-3 text-xs font-bold transition group-hover:shadow-sm', action.tone)}>
+        {action.label}
+        <ArrowRight className="h-3.5 w-3.5 opacity-70" />
+      </span>
+      <span className="text-right text-xs font-semibold tabular text-ink-500">
+        {formatRelativeTime(inquiry.receivedAt)}
+      </span>
+    </button>
+  );
+}
+
+function ConfidenceMeter({ inquiry }: { inquiry: Inquiry }) {
+  const value = inquiry.confidenceScore;
   const pct = Math.round(value * 100);
   const tone = pct >= 90 ? 'bg-brand-500' : pct >= 75 ? 'bg-info-500' : pct >= 60 ? 'bg-warn-500' : 'bg-danger-500';
+  const label = confidenceLabel(inquiry);
   return (
-    <div className="w-full max-w-[92px]">
+    <div className="w-full max-w-[116px]">
       <div className="flex items-center justify-between gap-2">
         <span className="font-mono text-xs font-semibold tabular text-ink-800">{pct}%</span>
-        <span className="text-[10px] font-medium text-ink-400">AI</span>
+        <span className="text-[10px] font-semibold text-ink-500">{label.short}</span>
       </div>
       <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-ink-100">
         <div className={cx('h-full rounded-full', tone)} style={{ width: `${pct}%` }} />
       </div>
+      <p className="mt-1 truncate text-[11px] font-medium text-ink-500">{label.detail}</p>
     </div>
   );
 }
 
-function NextAction({ status }: { status: InquiryStatus }) {
-  const copy: Record<InquiryStatus, { label: string; tone: string }> = {
-    received: { label: '분류 확인', tone: 'text-info-700 bg-info-50' },
-    classified: { label: '초안 생성 대기', tone: 'text-violet-600 bg-violet-50' },
-    auto_replied: { label: '모니터링', tone: 'text-brand-700 bg-brand-50' },
-    draft_ready: { label: '초안 검토', tone: 'text-violet-600 bg-violet-50' },
-    review_required: { label: '관리자 검토', tone: 'text-warn-700 bg-warn-50' },
-    saved: { label: '발송 결정', tone: 'text-ink-700 bg-ink-100' },
-    sent: { label: '완료', tone: 'text-brand-800 bg-brand-100' },
-    failed: { label: '원인 확인', tone: 'text-danger-700 bg-danger-50' },
-  };
-  return (
-    <span className={cx('inline-flex h-6 items-center rounded-full px-2.5 text-xs font-bold', copy[status].tone)}>
-      {copy[status].label}
-    </span>
-  );
+function nextActionCopy(inquiry: Inquiry) {
+  if (inquiry.status === 'failed') return { label: '원인 확인', tone: 'bg-danger-600 text-white' };
+  if (inquiry.status === 'review_required' && inquiry.type === 'exchange_refund') {
+    return { label: '환불 조건 확인', tone: 'bg-danger-50 text-danger-700 hover:bg-danger-100' };
+  }
+  if (inquiry.status === 'review_required') {
+    return { label: '정책 조건 확인', tone: 'bg-danger-50 text-danger-700 hover:bg-danger-100' };
+  }
+  if (inquiry.status === 'draft_ready') return { label: '초안 확인 후 발송', tone: 'bg-warn-50 text-warn-700 hover:bg-warn-100' };
+  if (inquiry.status === 'saved') return { label: '최종 발송', tone: 'bg-ink-900 text-white hover:bg-ink-800' };
+  if (inquiry.status === 'received' || inquiry.status === 'classified') return { label: '문의 유형 재확인', tone: 'bg-info-50 text-info-700 hover:bg-info-100' };
+  if (inquiry.status === 'auto_replied') return { label: '자동응답 확인', tone: 'bg-brand-50 text-brand-700 hover:bg-brand-100' };
+  return { label: '처리 완료', tone: 'bg-brand-100 text-brand-800 hover:bg-brand-100' };
 }
 
-function classificationCopy(type: InquiryType) {
+function classificationCopy(inquiry: Inquiry) {
   const copy: Record<InquiryType, string> = {
-    shipping: '배송 DB 조회 가능성 확인',
-    exchange_refund: '정책 근거 검토 필요',
-    product: '상품/FAQ 문서 참조',
-    other: '운영자 판단 필요',
+    shipping: inquiry.orderId ? '배송 · DB 조회 가능' : '배송 · 주문 식별 필요',
+    exchange_refund: '교환/환불 · 정책 근거 필요',
+    product: '상품 · FAQ/상품 문서 참조',
+    other: '기타 · 운영자 판단 필요',
   };
-  return copy[type];
+  return copy[inquiry.type];
+}
+
+function inquiryListSummary(inquiry: Inquiry) {
+  if (inquiry.type === 'shipping' && inquiry.body.includes('여러')) {
+    return '여러 주문 중 현재 배송 중인 송장번호 확인을 요청했습니다.';
+  }
+  const copy: Record<InquiryType, string> = {
+    shipping: '주문 배송 상태와 예상 도착일을 문의했습니다.',
+    exchange_refund: '수령한 상품의 핏/사이즈 차이로 교환·환불 가능 여부를 문의했습니다.',
+    product: '상품 옵션, 재입고 또는 관리 방법을 문의했습니다.',
+    other: inquiry.body.includes('매장')
+      ? '서울 오프라인 매장 방문 가능 여부를 문의했습니다.'
+      : '운영자 확인이 필요한 기타 문의를 남겼습니다.',
+  };
+  return copy[inquiry.type];
+}
+
+function confidenceLabel(inquiry: Inquiry) {
+  const pct = Math.round(inquiry.confidenceScore * 100);
+  if (pct >= 90) return { short: '높음', detail: inquiry.draft?.sources.length ? '근거 확인됨' : '자동화 가능' };
+  if (pct >= 75) return { short: '검토 권장', detail: inquiry.draft?.sources.length ? '정책 근거 확인' : '초안 확인 필요' };
+  if (pct >= 60) return { short: '확인 필요', detail: '운영자 판단 필요' };
+  return { short: '낮음', detail: '근거 확인 필요' };
 }
