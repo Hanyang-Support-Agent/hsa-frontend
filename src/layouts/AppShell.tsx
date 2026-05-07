@@ -84,14 +84,14 @@ export function AppShell({ session, onLogout }: { session: Session; onLogout: ()
           <div
             className="flex h-10 w-10 items-center justify-center rounded-xl text-sm font-black text-white shadow-lg ring-1 ring-white/15"
             style={{
-              background: 'linear-gradient(135deg, #22d3ee 0%, #2563eb 54%, #7c3aed 100%)',
+              background: 'linear-gradient(135deg, #2fc7c9 0%, #2f80ed 100%)',
             }}
           >
             H
           </div>
           <div className="min-w-0">
             <p className="truncate text-[15px] font-bold tracking-tight text-white">HSA Frontend</p>
-            <p className="truncate text-[10.5px] uppercase text-shell-muted">
+            <p className="truncate text-xs uppercase text-shell-muted">
               AI Response Operations
             </p>
           </div>
@@ -101,7 +101,7 @@ export function AppShell({ session, onLogout }: { session: Session; onLogout: ()
         <button
           type="button"
           onClick={() => navigate('/inquiries')}
-          className="relative mx-4 flex h-9 items-center gap-2 rounded-lg border border-shell-line bg-white/[0.045] px-3 text-left text-[12px] text-shell-muted shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:border-brand-400/40 hover:bg-white/[0.07] hover:text-shell-text"
+          className="relative mx-4 flex h-10 items-center gap-2 rounded-lg border border-shell-line bg-white/[0.045] px-3 text-left text-xs text-shell-muted shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:border-brand-400/40 hover:bg-white/[0.07] hover:text-shell-text"
         >
           <Search className="h-3.5 w-3.5" />
           <span className="flex-1 truncate">문의 검색</span>
@@ -130,21 +130,21 @@ export function AppShell({ session, onLogout }: { session: Session; onLogout: ()
         <div className="relative border-t border-shell-line p-4">
           <div className="mb-3 rounded-xl border border-brand-400/20 bg-brand-400/10 px-3 py-2.5">
             <div className="flex items-center justify-between">
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase text-brand-100">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase text-brand-100">
                 <Activity className="h-3 w-3" />
                 Live Queue
               </span>
-              <span className="rounded-full bg-warn-500/20 px-2 py-0.5 text-[11px] font-bold tabular text-warn-100">
+              <span className="rounded-full bg-warn-500/20 px-2.5 py-1 text-xs font-bold tabular text-warn-100">
                 {reviewCount}
               </span>
             </div>
-            <p className="mt-1 text-[11px] leading-snug text-shell-muted">검토 대기 문의가 운영자 액션을 기다립니다.</p>
+            <p className="mt-1 text-xs leading-snug text-shell-muted">검토 대기 문의가 운영자 액션을 기다립니다.</p>
           </div>
           <div className="flex items-center gap-2.5 rounded-lg px-1 py-1">
             <Avatar name={adminName} size="sm" className="ring-2 ring-shell-elev" />
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[12.5px] font-semibold text-white">{adminName}</p>
-              <p className="truncate text-[10.5px] uppercase tracking-[0.1em] text-shell-muted">
+              <p className="truncate text-xs font-semibold text-white">{adminName}</p>
+              <p className="truncate text-xs uppercase tracking-[0.1em] text-shell-muted">
                 {adminRole}
               </p>
             </div>
@@ -164,8 +164,8 @@ export function AppShell({ session, onLogout }: { session: Session; onLogout: ()
         <header className="sticky top-0 z-30 border-b border-white/60 bg-white/72 px-10 py-3 backdrop-blur-xl">
           <div className="flex items-center justify-between gap-6">
             <div>
-              <p className="text-[11px] font-semibold uppercase text-ink-400">HSA Console</p>
-              <h1 className="text-[17px] font-bold text-ink-900">{pageTitle}</h1>
+              <p className="text-xs font-semibold uppercase text-ink-400">HSA Console</p>
+              <h1 className="text-h3 text-ink-900">{pageTitle}</h1>
             </div>
             <div className="flex items-center gap-3">
               <span className="inline-flex h-8 items-center gap-2 rounded-full border border-brand-100 bg-brand-50 px-3 text-xs font-semibold text-brand-800 shadow-xs">
@@ -197,7 +197,7 @@ function NavGroup({
 }) {
   return (
     <div className={className}>
-      <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-shell-muted/70">
+      <p className="mb-1 px-2 text-xs font-semibold uppercase tracking-[0.16em] text-shell-muted/70">
         {label}
       </p>
       <div className="space-y-0.5">{children}</div>
@@ -213,7 +213,7 @@ function NavItemLink({ item, inquiries }: { item: NavItem; inquiries: Inquiry[] 
       to={item.to}
       className={({ isActive }) =>
         cx(
-          'group relative flex items-center gap-2.5 rounded-md px-2 py-1.5 text-[13px] font-medium transition',
+          'group relative flex min-h-9 items-center gap-2.5 rounded-md px-2 py-2 text-xs font-medium transition',
           isActive
             ? 'bg-white/[0.09] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-white/10'
             : 'text-shell-muted hover:bg-white/[0.055] hover:text-shell-text',
@@ -230,7 +230,7 @@ function NavItemLink({ item, inquiries }: { item: NavItem; inquiries: Inquiry[] 
           {count > 0 && (
             <span
               className={cx(
-                'inline-flex h-4 min-w-[18px] items-center justify-center rounded-full px-1.5 text-[10px] font-semibold tabular',
+                'inline-flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-xs font-semibold tabular',
                 item.countTone === 'warn'
                   ? 'bg-warn-500/20 text-warn-100 ring-1 ring-warn-500/30'
                   : 'bg-shell-elev text-shell-text',

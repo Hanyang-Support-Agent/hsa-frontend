@@ -200,18 +200,18 @@ export function InquiryDetailPage() {
               {inquiry.customer.email && (
                 <span className="inline-flex items-center gap-1.5">
                   <Mail className="h-3.5 w-3.5" />
-                  <span className="font-mono text-[11px]">{inquiry.customer.email}</span>
+                  <span className="font-mono text-xs">{inquiry.customer.email}</span>
                 </span>
               )}
               {inquiry.customer.handle && (
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="font-mono text-[11px]">@{inquiry.customer.handle}</span>
+                  <span className="font-mono text-xs">@{inquiry.customer.handle}</span>
                 </span>
               )}
               {inquiry.orderId && (
                 <span className="inline-flex items-center gap-1.5">
                   <span className="text-ink-400">주문</span>
-                  <span className="font-mono text-[11px] text-ink-700">{inquiry.orderId}</span>
+                  <span className="font-mono text-xs text-ink-700">{inquiry.orderId}</span>
                 </span>
               )}
             </div>
@@ -349,7 +349,7 @@ export function InquiryDetailPage() {
                 <button
                   type="button"
                   onClick={() => setFinalText(draft.draftText)}
-                  className="shrink-0 rounded border border-violet-50 bg-white px-2 py-0.5 text-[11px] font-medium text-violet-600 transition hover:bg-violet-50"
+                  className="shrink-0 rounded border border-violet-50 bg-white px-2 py-0.5 text-xs font-medium text-violet-600 transition hover:bg-violet-50"
                 >
                   제안 채택
                 </button>
@@ -381,7 +381,7 @@ export function InquiryDetailPage() {
                 className="block min-h-[340px] w-full resize-y rounded-md bg-transparent px-4 py-3 text-sm leading-7 text-ink-900 outline-none placeholder:text-ink-400 disabled:cursor-not-allowed disabled:text-ink-500"
               />
               <div className="flex items-center justify-between border-t border-line bg-surface-muted/40 px-3 py-2">
-                <div className="flex items-center gap-3 text-[11px] text-ink-500">
+                <div className="flex items-center gap-3 text-xs text-ink-500">
                   <span className="tabular">
                     {finalText.length} / {Math.max(finalText.length, 800)} 자
                   </span>
@@ -393,7 +393,7 @@ export function InquiryDetailPage() {
                   ) : null}
                 </div>
                 {!isFinal && (
-                  <div className="flex items-center gap-2 text-[11px] text-ink-500">
+                  <div className="flex items-center gap-2 text-xs text-ink-500">
                     <span>저장</span>
                     <Kbd>⌘</Kbd>
                     <Kbd>S</Kbd>
@@ -486,7 +486,7 @@ function InsightCard({
         accent ? 'border-warn-100 ring-1 ring-warn-100' : 'border-white/70 ring-1 ring-line/60',
       )}
     >
-      <p className="text-[11px] font-bold uppercase text-ink-400">{label}</p>
+      <p className="text-xs font-bold uppercase text-ink-400">{label}</p>
       <div className="mt-3 line-clamp-2 text-sm font-bold leading-snug text-ink-900">{value}</div>
       {meter !== undefined && (
         <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-ink-100">
@@ -526,7 +526,7 @@ function FlowBar({ inquiry }: { inquiry: Inquiry }) {
           <div key={step.key} className="flex flex-1 items-center gap-2 last:flex-none">
             <span
               className={cx(
-                'inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold transition',
+                'inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-semibold transition',
                 isActive
                   ? 'bg-brand-600 text-white'
                   : 'bg-surface text-ink-400 ring-1 ring-line',
@@ -562,7 +562,7 @@ function SourceItem({ source, index }: { source: SourceDocument; index: number }
   const meta = documentTypeMeta[source.type];
   return (
     <li className="flex gap-3 px-5 py-3.5">
-      <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded bg-ink-900 text-[10px] font-bold tabular text-white">
+      <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded bg-ink-900 text-xs font-bold tabular text-white">
         {index}
       </span>
       <div className="min-w-0 flex-1">
@@ -614,8 +614,8 @@ function ProcessHistory({ inquiry }: { inquiry: Inquiry }) {
           </span>
           <div className="min-w-0 flex-1">
             <p className="text-xs font-semibold text-ink-900">{event.label}</p>
-            <p className="text-[11px] tabular text-ink-500">{formatDateTime(event.time)}</p>
-            {event.note && <p className="mt-0.5 text-[11px] text-ink-500">{event.note}</p>}
+            <p className="text-xs tabular text-ink-500">{formatDateTime(event.time)}</p>
+            {event.note && <p className="mt-0.5 text-xs text-ink-500">{event.note}</p>}
           </div>
         </li>
       ))}

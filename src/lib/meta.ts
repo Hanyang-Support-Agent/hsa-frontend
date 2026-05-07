@@ -39,10 +39,10 @@ export const channelMeta: Record<Channel, VisualMeta & { icon: 'kakao' | 'instag
   instagram: {
     label: '인스타',
     icon: 'instagram',
-    dot: 'bg-[#DD2A7B]',
-    wash: 'bg-violet-50',
-    ink: 'text-[#7B1F4F]',
-    border: 'border-[#DD2A7B]/30',
+    dot: 'bg-brand-500',
+    wash: 'bg-brand-50',
+    ink: 'text-brand-700',
+    border: 'border-brand-100',
   },
   email: {
     label: '이메일',
@@ -69,9 +69,9 @@ export const inquiryTypeMeta: Record<InquiryType, VisualMeta> = {
   },
   product: {
     label: '상품',
-    dot: 'bg-brand-500',
-    wash: 'bg-brand-50',
-    ink: 'text-brand-700',
+    dot: 'bg-info-500',
+    wash: 'bg-info-50',
+    ink: 'text-info-700',
   },
   other: {
     label: '기타',
@@ -108,9 +108,9 @@ export const statusMeta: Record<InquiryStatus, VisualMeta> = {
   },
   review_required: {
     label: '검토필요',
-    dot: 'bg-danger-500',
-    wash: 'bg-danger-50',
-    ink: 'text-danger-700',
+    dot: 'bg-warn-500',
+    wash: 'bg-warn-50',
+    ink: 'text-warn-700',
   },
   saved: {
     label: '임시저장',
@@ -141,9 +141,9 @@ export const processingModeMeta: Record<ProcessingMode, VisualMeta> = {
   },
   draft_review: {
     label: '초안검토',
-    dot: 'bg-violet-500',
-    wash: 'bg-violet-50',
-    ink: 'text-violet-600',
+    dot: 'bg-brand-500',
+    wash: 'bg-brand-50',
+    ink: 'text-brand-700',
   },
   manual: {
     label: '수동처리',
@@ -174,9 +174,9 @@ export const documentTypeMeta: Record<DocumentType, VisualMeta> = {
   },
   product_info: {
     label: '상품 정보',
-    dot: 'bg-brand-500',
-    wash: 'bg-brand-50',
-    ink: 'text-brand-700',
+    dot: 'bg-info-500',
+    wash: 'bg-info-50',
+    ink: 'text-info-700',
   },
 };
 

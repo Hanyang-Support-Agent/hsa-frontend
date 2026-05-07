@@ -124,7 +124,7 @@ export function LogsPage() {
               <section key={day}>
                 <div className="flex items-center justify-between border-b border-line bg-surface-muted/50 px-6 py-3">
                   <span className="text-sm font-bold tracking-tight text-ink-800">{day}</span>
-                  <span className="text-[11px] font-semibold tabular text-ink-400">{events.length} events</span>
+                  <span className="text-xs font-semibold tabular text-ink-400">{events.length} events</span>
                 </div>
                 <ol className="divide-y divide-line">
                   {events.map((log) => (
@@ -163,7 +163,7 @@ export function LogsPage() {
                   {log.inquiryId && (
                     <Link
                       to={`/inquiries/${log.inquiryId}`}
-                      className="font-mono text-[11px] text-ink-500 hover:text-brand-700"
+                      className="font-mono text-xs text-ink-500 hover:text-brand-700"
                     >
                       {log.inquiryId}
                     </Link>
@@ -215,7 +215,7 @@ function ActivitySummary({ summary }: { summary: { total: number; ai: number; op
 function SummaryItem({ label, value, tone = 'neutral' }: { label: string; value: number; tone?: 'neutral' | 'danger' }) {
   return (
     <div className="border-r border-line px-4 last:border-r-0 first:pl-0">
-      <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-400">{label}</p>
+      <p className="text-xs font-bold uppercase tracking-[0.12em] text-ink-400">{label}</p>
       <p className={cx('mt-1 text-xl font-black tabular', tone === 'danger' && value > 0 ? 'text-danger-600' : 'text-ink-900')}>
         {value}
         <span className="ml-1 text-xs font-bold text-ink-400">건</span>
@@ -254,7 +254,7 @@ function ActivityStreamRow({ log }: { log: LogEvent }) {
           {log.inquiryId && (
             <Link
               to={`/inquiries/${log.inquiryId}`}
-              className="inline-flex h-5 items-center rounded-full bg-ink-100 px-2 font-mono text-[11px] font-semibold text-ink-600 hover:text-brand-700"
+              className="inline-flex h-5 items-center rounded-full bg-ink-100 px-2 font-mono text-xs font-semibold text-ink-600 hover:text-brand-700"
             >
               {log.inquiryId}
             </Link>
@@ -262,7 +262,7 @@ function ActivityStreamRow({ log }: { log: LogEvent }) {
           {metadataChips(log).map((chip) => (
             <span
               key={chip}
-              className="inline-flex h-5 items-center rounded-full bg-ink-100 px-2 text-[11px] font-semibold text-ink-600"
+              className="inline-flex h-5 items-center rounded-full bg-ink-100 px-2 text-xs font-semibold text-ink-600"
             >
               {chip}
             </span>

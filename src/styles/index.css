@@ -18,11 +18,9 @@ body {
   margin: 0;
   min-width: 1280px;
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.72), rgba(244,247,251,0.96) 42%),
-    linear-gradient(90deg, rgba(8,145,178,0.07) 0 1px, transparent 1px 100%),
-    linear-gradient(180deg, rgba(8,145,178,0.06) 0 1px, transparent 1px 100%),
+    linear-gradient(180deg, rgba(255,255,255,0.9), rgba(244,246,249,0.98) 38%),
     var(--color-bg);
-  background-size: auto, 48px 48px, 48px 48px, auto;
+  background-size: auto;
   color: var(--color-ink-900);
   font-family:
     'Pretendard Variable',
@@ -34,8 +32,8 @@ body {
     Roboto,
     'Helvetica Neue',
     sans-serif;
-  font-size: 14px;
-  line-height: 1.55;
+  font-size: 15px;
+  line-height: 1.6;
   font-feature-settings: 'ss01', 'cv11', 'tnum';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

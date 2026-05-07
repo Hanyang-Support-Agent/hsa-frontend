@@ -4,8 +4,6 @@ const colors = [
   'bg-brand-100 text-brand-700',
   'bg-info-100 text-info-700',
   'bg-warn-100 text-warn-700',
-  'bg-violet-50 text-violet-600',
-  'bg-danger-100 text-danger-700',
   'bg-ink-200 text-ink-700',
 ];
 
@@ -26,10 +24,10 @@ export function Avatar({
 }) {
   const dim =
     size === 'sm'
-      ? 'h-7 w-7 text-[11px]'
+      ? 'h-8 w-8 text-xs'
       : size === 'lg'
-        ? 'h-10 w-10 text-sm'
-        : 'h-8 w-8 text-xs';
+        ? 'h-11 w-11 text-sm'
+        : 'h-9 w-9 text-xs';
   return (
     <span
       className={cx(

@@ -54,7 +54,7 @@ export function LoginPage({ session, onLogin }: { session: Session; onLogin: () 
         </div>
 
         <div className="relative max-w-lg">
-          <p className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-shell-line bg-shell-elev px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-brand-400">
+          <p className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-shell-line bg-shell-elev px-2.5 py-1 text-xs font-medium uppercase tracking-[0.14em] text-brand-400">
             <Sparkles className="h-3 w-3" /> CS Triage Agent · PoC
           </p>
           <h1 className="text-[40px] font-bold leading-[1.15] tracking-tight text-white">
@@ -81,7 +81,7 @@ export function LoginPage({ session, onLogin }: { session: Session; onLogin: () 
           </ul>
         </div>
 
-        <div className="relative flex items-center gap-3 text-[11px] uppercase tracking-[0.16em] text-shell-muted">
+        <div className="relative flex items-center gap-3 text-xs uppercase tracking-[0.16em] text-shell-muted">
           <span>v0.1 · PoC Build</span>
           <span>·</span>
           <span>2026.04</span>

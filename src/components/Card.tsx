@@ -28,8 +28,8 @@ export function Card({
   return (
     <section
       className={cx(
-        'rounded-xl border shadow-xs',
-        tone === 'surface' && 'border-white/70 bg-white/86 backdrop-blur-xl ring-1 ring-line/60',
+        'rounded-2xl border shadow-xs',
+        tone === 'surface' && 'border-white/80 bg-white/92 backdrop-blur-xl ring-1 ring-line/60',
         tone === 'sunken' && 'border-line bg-surface-muted',
         tone === 'dark' && 'border-shell-line bg-shell text-shell-text shadow-lg',
         className,

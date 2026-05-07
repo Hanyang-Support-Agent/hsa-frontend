@@ -125,7 +125,7 @@ export function InquiriesPage() {
 
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3">
           <div className="flex items-center gap-1.5">
-            <span className="mr-1 text-[11px] font-semibold uppercase tracking-wider text-ink-500">
+            <span className="mr-1 text-xs font-semibold uppercase tracking-wider text-ink-500">
               상태
             </span>
             {(Object.keys(STATUS_PRESETS) as StatusFilter[]).map((key) => (
@@ -142,7 +142,7 @@ export function InquiriesPage() {
           <div className="h-5 w-px bg-line" />
 
           <div className="flex items-center gap-1.5">
-            <span className="mr-1 text-[11px] font-semibold uppercase tracking-wider text-ink-500">
+            <span className="mr-1 text-xs font-semibold uppercase tracking-wider text-ink-500">
               채널
             </span>
             <FilterChip active={channel === 'all'} onClick={() => setChannel('all')}>
@@ -163,7 +163,7 @@ export function InquiriesPage() {
           <div className="h-5 w-px bg-line" />
 
           <div className="flex items-center gap-1.5">
-            <span className="mr-1 text-[11px] font-semibold uppercase tracking-wider text-ink-500">
+            <span className="mr-1 text-xs font-semibold uppercase tracking-wider text-ink-500">
               유형
             </span>
             <FilterChip active={type === 'all'} onClick={() => setType('all')}>
@@ -212,11 +212,11 @@ export function InquiriesPage() {
         }
         action={
           <div className="flex items-center gap-2">
-            <span className="inline-flex h-7 items-center gap-1.5 rounded-full border border-line bg-surface-muted px-2.5 text-[11px] font-semibold text-ink-600">
+            <span className="inline-flex h-7 items-center gap-1.5 rounded-full border border-line bg-surface-muted px-2.5 text-xs font-semibold text-ink-600">
               <SortDesc className="h-3.5 w-3.5" />
               우선순위순
             </span>
-            <span className="hidden h-7 items-center gap-1.5 rounded-full border border-line bg-white px-2.5 text-[11px] font-semibold text-ink-500 xl:inline-flex">
+            <span className="hidden h-7 items-center gap-1.5 rounded-full border border-line bg-white px-2.5 text-xs font-semibold text-ink-500 xl:inline-flex">
               <Kbd>J</Kbd>/<Kbd>K</Kbd> 이동 · <Kbd>↵</Kbd> 열기 · <Kbd>/</Kbd> 검색
             </span>
           </div>
@@ -245,7 +245,7 @@ export function InquiriesPage() {
           </div>
         ) : (
           <div className="p-4">
-            <div className="grid grid-cols-[minmax(360px,1.45fr)_180px_140px_150px_170px_90px] gap-3 px-4 pb-2 text-[11px] font-bold uppercase tracking-[0.08em] text-ink-400">
+            <div className="grid grid-cols-[minmax(360px,1.45fr)_180px_140px_150px_170px_90px] gap-3 px-4 pb-2 text-xs font-bold uppercase tracking-[0.08em] text-ink-400">
               <span>문의</span>
               <span>AI 판단</span>
               <span>신뢰도</span>
@@ -301,7 +301,7 @@ function InquiryQueueRow({
             <p className="truncate text-sm font-bold text-ink-900 group-hover:text-brand-800">
               {inquiry.summary}
             </p>
-            <span className="font-mono text-[10.5px] text-ink-400">{inquiry.id}</span>
+            <span className="font-mono text-xs text-ink-400">{inquiry.id}</span>
           </div>
           <p className="mt-1 truncate text-xs leading-snug text-ink-500">
             <span className="font-semibold text-ink-700">{inquiry.customer.name} 고객</span>
@@ -312,7 +312,7 @@ function InquiryQueueRow({
       </div>
       <div className="min-w-0 space-y-1.5">
         <InquiryTypeBadge type={inquiry.type} size="xs" />
-        <p className="truncate text-[11px] font-medium leading-snug text-ink-500">
+        <p className="truncate text-xs font-medium leading-snug text-ink-500">
           {classificationCopy(inquiry)}
         </p>
       </div>
@@ -341,12 +341,12 @@ function ConfidenceMeter({ inquiry }: { inquiry: Inquiry }) {
     <div className="w-full max-w-[116px]">
       <div className="flex items-center justify-between gap-2">
         <span className="font-mono text-xs font-semibold tabular text-ink-800">{pct}%</span>
-        <span className="text-[10px] font-semibold text-ink-500">{label.short}</span>
+        <span className="text-xs font-semibold text-ink-500">{label.short}</span>
       </div>
       <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-ink-100">
         <div className={cx('h-full rounded-full', tone)} style={{ width: `${pct}%` }} />
       </div>
-      <p className="mt-1 truncate text-[11px] font-medium text-ink-500">{label.detail}</p>
+      <p className="mt-1 truncate text-xs font-medium text-ink-500">{label.detail}</p>
     </div>
   );
 }

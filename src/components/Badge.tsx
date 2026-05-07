@@ -26,7 +26,7 @@ const toneMeta: Record<Tone, { wash: string; ink: string; dot: string }> = {
   success: { wash: 'bg-brand-50', ink: 'text-brand-700', dot: 'bg-brand-500' },
   warn: { wash: 'bg-warn-50', ink: 'text-warn-700', dot: 'bg-warn-500' },
   danger: { wash: 'bg-danger-50', ink: 'text-danger-700', dot: 'bg-danger-500' },
-  violet: { wash: 'bg-violet-50', ink: 'text-violet-600', dot: 'bg-violet-500' },
+  violet: { wash: 'bg-brand-50', ink: 'text-brand-700', dot: 'bg-brand-500' },
 };
 
 interface BasePillProps {
@@ -53,7 +53,7 @@ export function Pill({
     <span
       className={cx(
         'inline-flex items-center gap-1.5 rounded-full border border-white/70 font-semibold tracking-tight whitespace-nowrap shadow-[inset_0_1px_0_rgba(255,255,255,0.62)]',
-        size === 'xs' ? 'h-5 px-2 text-[11px]' : 'h-6 px-2.5 text-xs',
+        size === 'xs' ? 'h-6 px-2.5 text-xs' : 'h-7 px-3 text-xs',
         wash,
         ink,
         className,
@@ -97,7 +97,7 @@ export function DocumentStatusBadge({ status, size = 'sm' }: { status: DocumentS
 
 /** Channel signature mark — uses brand-recognizable colour blocks. */
 export function ChannelMark({ channel, size = 'md' }: { channel: Channel; size?: 'sm' | 'md' | 'lg' }) {
-  const dim = size === 'sm' ? 'h-6 w-6 text-[11px]' : size === 'lg' ? 'h-10 w-10 text-base' : 'h-8 w-8 text-xs';
+  const dim = size === 'sm' ? 'h-7 w-7 text-xs' : size === 'lg' ? 'h-11 w-11 text-base' : 'h-9 w-9 text-xs';
   if (channel === 'kakao') {
     return (
       <span className={cx('inline-flex items-center justify-center rounded-lg bg-[#FEE500] font-black text-[#181600] shadow-sm ring-1 ring-black/5', dim)}>
@@ -109,13 +109,9 @@ export function ChannelMark({ channel, size = 'md' }: { channel: Channel; size?:
     return (
       <span
         className={cx(
-          'inline-flex items-center justify-center rounded-lg font-black text-white shadow-sm ring-1 ring-white/40',
+          'inline-flex items-center justify-center rounded-lg bg-brand-600 font-black text-white shadow-sm ring-1 ring-brand-100',
           dim,
         )}
-        style={{
-          background:
-            'linear-gradient(135deg, #f58529 0%, #dd2a7b 50%, #8134af 100%)',
-        }}
       >
         IG
       </span>

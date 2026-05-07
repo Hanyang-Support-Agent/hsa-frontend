@@ -155,7 +155,7 @@ export function DocumentsPage() {
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-ink-900">{doc.title}</p>
-                    <p className="mt-0.5 truncate font-mono text-[11px] text-ink-500">
+                    <p className="mt-0.5 truncate font-mono text-xs text-ink-500">
                       {doc.fileName}
                     </p>
                   </div>
@@ -164,7 +164,7 @@ export function DocumentsPage() {
                   <DocumentTypeBadge type={doc.type} size="xs" />
                   <DocumentStatusBadge status={doc.status} size="xs" />
                 </div>
-                <div className="mt-3 flex items-center justify-between border-t border-line bg-surface-muted/30 px-4 py-2.5 text-[11px]">
+                <div className="mt-3 flex items-center justify-between border-t border-line bg-surface-muted/30 px-4 py-2.5 text-xs">
                   <div className="flex items-center gap-2 text-ink-500">
                     <span className="tabular">{formatDateTime(doc.uploadedAt)}</span>
                     <span>·</span>
@@ -256,7 +256,7 @@ export function DocumentsPage() {
           <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-line-strong bg-surface-muted/40 px-4 py-6 text-center">
             <Upload className="mb-2 h-5 w-5 text-ink-400" />
             <p className="text-xs font-semibold text-ink-700">파일을 드래그하거나 클릭해 업로드</p>
-            <p className="mt-1 text-[11px] text-ink-500">
+            <p className="mt-1 text-xs text-ink-500">
               PDF, DOCX, XLSX, CSV · 최대 20 MB (PoC mock)
             </p>
           </div>
@@ -320,7 +320,7 @@ function FilterTab({
       {count !== undefined && (
         <span
           className={cx(
-            'inline-flex h-4 min-w-[20px] items-center justify-center rounded-full px-1 text-[10px] font-semibold tabular',
+            'inline-flex h-4 min-w-[20px] items-center justify-center rounded-full px-1 text-xs font-semibold tabular',
             active ? 'bg-white/20 text-white' : 'bg-ink-100 text-ink-600',
           )}
         >

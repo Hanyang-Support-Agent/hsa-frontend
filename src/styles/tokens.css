@@ -2,54 +2,54 @@
   color-scheme: light;
 
   /* === Neutrals (premium SaaS) === */
-  --color-bg: #f4f7fb;
+  --color-bg: #f4f6f9;
   --color-surface: #ffffff;
-  --color-surface-muted: #f7f9fc;
-  --color-surface-sunken: #eef3f8;
+  --color-surface-muted: #f7f8fb;
+  --color-surface-sunken: #eef2f7;
 
-  --color-line: #dde6ef;
-  --color-line-strong: #c7d4e2;
+  --color-line: #e3e8f0;
+  --color-line-strong: #cbd5e1;
 
   --color-ink-50: #f8fafc;
   --color-ink-100: #eef2f7;
   --color-ink-200: #dde6ef;
   --color-ink-300: #c7d4e2;
-  --color-ink-400: #8ea0b5;
-  --color-ink-500: #65758b;
-  --color-ink-600: #46576c;
-  --color-ink-700: #2f3d4f;
-  --color-ink-800: #1a2533;
-  --color-ink-900: #0b1220;
+  --color-ink-400: #96a3b5;
+  --color-ink-500: #6b778c;
+  --color-ink-600: #4b5568;
+  --color-ink-700: #334155;
+  --color-ink-800: #1f2937;
+  --color-ink-900: #111827;
 
   /* === Sidebar (AI ops navy) === */
-  --color-shell: #07111f;
-  --color-shell-elev: #0d1b2e;
-  --color-shell-line: #1d2b40;
+  --color-shell: #081525;
+  --color-shell-elev: #102033;
+  --color-shell-line: #203149;
   --color-shell-text: #e8f1ff;
   --color-shell-text-muted: #8fa4bf;
 
-  /* === Brand (HSA signal teal) === */
-  --color-brand-50: #ecfeff;
-  --color-brand-100: #cffafe;
-  --color-brand-200: #a5f3fc;
-  --color-brand-400: #22d3ee;
-  --color-brand-500: #06b6d4;
-  --color-brand-600: #0891b2;
-  --color-brand-700: #0e7490;
-  --color-brand-800: #155e75;
+  /* === Brand (Toss-like blue signal) === */
+  --color-brand-50: #eef6ff;
+  --color-brand-100: #d9ebff;
+  --color-brand-200: #b9dcff;
+  --color-brand-400: #5aa7ff;
+  --color-brand-500: #2f80ed;
+  --color-brand-600: #1f6feb;
+  --color-brand-700: #155ec5;
+  --color-brand-800: #154d9a;
 
   /* === Semantic === */
-  --color-info-50: #eff6ff;
-  --color-info-100: #dbeafe;
-  --color-info-500: #3b82f6;
-  --color-info-600: #2563eb;
-  --color-info-700: #1d4ed8;
+  --color-info-50: #eefbfb;
+  --color-info-100: #d8f4f5;
+  --color-info-500: #2fc7c9;
+  --color-info-600: #129fa4;
+  --color-info-700: #0b7c83;
 
-  --color-warn-50: #fffbeb;
-  --color-warn-100: #fef3c7;
-  --color-warn-500: #f59e0b;
-  --color-warn-600: #d97706;
-  --color-warn-700: #b45309;
+  --color-warn-50: #fff7e6;
+  --color-warn-100: #ffedc2;
+  --color-warn-500: #ff9f1c;
+  --color-warn-600: #e88500;
+  --color-warn-700: #b96700;
 
   --color-danger-50: #fef2f2;
   --color-danger-100: #fee2e2;
@@ -57,9 +57,9 @@
   --color-danger-600: #dc2626;
   --color-danger-700: #b91c1c;
 
-  --color-violet-50: #f4f1ff;
-  --color-violet-500: #7c3aed;
-  --color-violet-600: #6d28d9;
+  --color-violet-50: #eef6ff;
+  --color-violet-500: #2f80ed;
+  --color-violet-600: #1f6feb;
 
   /* === Channel signature colors === */
   --color-kakao-bg: #fee500;
@@ -102,14 +102,14 @@
   --radius-full: 9999px;
 
   /* === Type scale === */
-  --font-display: 28px;
-  --font-h1: 22px;
-  --font-h2: 18px;
-  --font-h3: 15px;
-  --font-body: 14px;
-  --font-sm: 13px;
-  --font-xs: 12px;
-  --font-mono-xs: 11px;
+  --font-display: 36px;
+  --font-h1: 28px;
+  --font-h2: 22px;
+  --font-h3: 18px;
+  --font-body: 15px;
+  --font-sm: 14px;
+  --font-xs: 14px;
+  --font-mono-xs: 14px;
 
   --leading-tight: 1.25;
   --leading-snug: 1.4;

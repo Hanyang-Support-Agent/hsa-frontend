@@ -91,7 +91,7 @@ export function DevIntakePage() {
                       <p className="text-sm font-semibold text-ink-900">
                         {channelMeta[ch].label}
                       </p>
-                      <p className="text-[11px] text-ink-500">
+                      <p className="text-xs text-ink-500">
                         {ch === 'kakao' ? '비즈니스 채널' : ch === 'instagram' ? 'DM' : 'CS 메일'}
                       </p>
                     </div>
@@ -165,13 +165,13 @@ export function DevIntakePage() {
               <div className="text-xs">
                 <p className="font-semibold text-ink-900">자동응답 조건</p>
                 <p className="mt-0.5 leading-relaxed text-ink-600">
-                  <span className="rounded bg-ink-100 px-1 font-mono text-[11px]">배송</span>{' '}
+                  <span className="rounded bg-ink-100 px-1 font-mono text-xs">배송</span>{' '}
                   유형 + 주문번호가 있으면{' '}
-                  <span className="rounded bg-brand-50 px-1 font-mono text-[11px] text-brand-700">
+                  <span className="rounded bg-brand-50 px-1 font-mono text-xs text-brand-700">
                     auto_replied
                   </span>
                   , 그 외에는{' '}
-                  <span className="rounded bg-warn-50 px-1 font-mono text-[11px] text-warn-700">
+                  <span className="rounded bg-warn-50 px-1 font-mono text-xs text-warn-700">
                     review_required
                   </span>
                   로 생성됩니다.
@@ -204,7 +204,7 @@ function Rule({
     <li className="flex items-center gap-3 px-4 py-2.5">
       <span className={cx('h-1.5 w-1.5 shrink-0 rounded-full', dot)} />
       <p className="text-sm font-semibold text-ink-900">{label}</p>
-      <p className="ml-auto truncate font-mono text-[11px] text-ink-500">{keywords}</p>
+      <p className="ml-auto truncate font-mono text-xs text-ink-500">{keywords}</p>
     </li>
   );
 }
