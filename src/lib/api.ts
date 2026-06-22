@@ -76,6 +76,7 @@ interface BackendProcessingLog {
   createdTime?: string;
   createdAt?: string;
   currentState?: string;
+  detail?: string;
 }
 
 interface BackendResponseResponse {
@@ -240,7 +241,7 @@ function toLogEvent(log: BackendProcessingLog, fallbackInquiryId?: string): LogE
     id: String(log.logId ?? log.id ?? `${fallbackInquiryId ?? 'LOG'}-${log.createdTime ?? log.createdAt ?? Date.now()}`),
     inquiryId: log.inquiryId ? String(log.inquiryId) : fallbackInquiryId,
     eventType: toLogEventType(log.eventType),
-    message: log.message ?? log.currentState ?? log.eventType ?? '처리 로그',
+    message: log.message ?? log.detail ?? log.currentState ?? log.eventType ?? '처리 로그',
     createdAt: log.createdTime ?? log.createdAt ?? new Date().toISOString(),
   };
 }

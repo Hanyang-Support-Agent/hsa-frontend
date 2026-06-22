@@ -72,9 +72,26 @@ DB / RAG / Processing Logs
 | 문서 관리 | - | Backend contract needed |
 | 인증 세션 | - | Backend contract needed |
 
+### Deployed Backend Verification
+
+AWS ALB로 공개된 백엔드 Swagger와 API 응답을 확인했습니다.
+
+```text
+Swagger UI : http://hsa-alb-1734268684.us-east-1.elb.amazonaws.com/swagger-ui/index.html
+OpenAPI    : http://hsa-alb-1734268684.us-east-1.elb.amazonaws.com/api-docs
+Health     : http://hsa-alb-1734268684.us-east-1.elb.amazonaws.com/health
+Backend    : http://hsa-alb-1734268684.us-east-1.elb.amazonaws.com
+```
+
+확인 결과:
+- `/health`가 `Server is running perfectly!`로 응답합니다.
+- Swagger 기준 현재 프론트가 사용하는 문의/답변/로그 API가 배포 백엔드에 존재합니다.
+- `GET /api/admin/inquiries`가 실제 RDS 데이터로 정상 응답합니다.
+- 프론트 개발 서버에서 `VITE_API_PROXY_TARGET`을 ALB 주소로 바꿔 배포 백엔드 목록/상세 조회 화면을 확인했습니다.
+
 ### Local Integration Evidence
 
-로컬에서 다음 구성을 띄워 통합 흐름을 확인했습니다.
+로컬 백엔드/H2/AI stub 구성에서도 통합 흐름을 확인했습니다.
 
 ```text
 Frontend  : http://127.0.0.1:5173
@@ -110,7 +127,7 @@ cp .env.example .env.local
 `.env.local`:
 
 ```env
-VITE_API_PROXY_TARGET=http://127.0.0.1:8080
+VITE_API_PROXY_TARGET=http://hsa-alb-1734268684.us-east-1.elb.amazonaws.com
 VITE_API_BASE_URL=
 VITE_ADMIN_ID=1
 VITE_CHANNEL_ID=1
