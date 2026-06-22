@@ -77,6 +77,7 @@ DB / RAG / Processing Logs
 AWS ALB로 공개된 백엔드 Swagger와 API 응답을 확인했습니다.
 
 ```text
+Frontend   : https://hsa-frontend-omega.vercel.app
 Swagger UI : http://hsa-alb-1734268684.us-east-1.elb.amazonaws.com/swagger-ui/index.html
 OpenAPI    : http://hsa-alb-1734268684.us-east-1.elb.amazonaws.com/api-docs
 Health     : http://hsa-alb-1734268684.us-east-1.elb.amazonaws.com/health
@@ -88,6 +89,7 @@ Backend    : http://hsa-alb-1734268684.us-east-1.elb.amazonaws.com
 - Swagger 기준 현재 프론트가 사용하는 문의/답변/로그 API가 배포 백엔드에 존재합니다.
 - `GET /api/admin/inquiries`가 실제 RDS 데이터로 정상 응답합니다.
 - 프론트 개발 서버에서 `VITE_API_PROXY_TARGET`을 ALB 주소로 바꿔 배포 백엔드 목록/상세 조회 화면을 확인했습니다.
+- Vercel 배포에서는 `/api/*` rewrite로 HTTPS 프론트에서 HTTP ALB 백엔드를 프록시해 mixed content 차단을 회피했습니다.
 
 ### Local Integration Evidence
 
