@@ -52,9 +52,15 @@ export function DocumentsPage() {
 
   const load = useCallback(async () => {
     setIsLoading(true);
-    setDocuments(await api.listDocuments());
-    setIsLoading(false);
-  }, []);
+    try {
+      setDocuments(await api.listDocuments());
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : '문서 목록을 불러오지 못했습니다.', 'warn');
+      setDocuments([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [showToast]);
 
   useEffect(() => {
     void load();
@@ -63,20 +69,28 @@ export function DocumentsPage() {
   async function handleUpload(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!title.trim() || !fileName.trim()) return;
-    await api.uploadDocument({ title, type, fileName });
-    setTitle('');
-    setFileName('');
-    setUploadOpen(false);
-    showToast('문서를 등록했습니다.');
-    await load();
+    try {
+      await api.uploadDocument({ title, type, fileName });
+      setTitle('');
+      setFileName('');
+      setUploadOpen(false);
+      showToast('문서를 등록했습니다.');
+      await load();
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : '문서 등록에 실패했습니다.', 'warn');
+    }
   }
 
   async function handleDelete() {
     if (!deleteTarget) return;
-    await api.deleteDocument(deleteTarget.id);
-    setDeleteTarget(null);
-    showToast('문서를 삭제했습니다.', 'info');
-    await load();
+    try {
+      await api.deleteDocument(deleteTarget.id);
+      setDeleteTarget(null);
+      showToast('문서를 삭제했습니다.', 'info');
+      await load();
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : '문서 삭제에 실패했습니다.', 'warn');
+    }
   }
 
   const filtered =
@@ -192,10 +206,10 @@ export function DocumentsPage() {
             <HelpCircle className="h-4 w-4" />
           </span>
           <div className="text-xs text-ink-600">
-            <p className="font-semibold text-ink-800">PoC 안내</p>
+            <p className="font-semibold text-ink-800">백엔드 계약 대기</p>
             <p className="mt-0.5 leading-relaxed text-ink-500">
-              업로드된 파일은 실제로 저장되지 않으며, 메타데이터만 mock 데이터에 등록됩니다.
-              실제 RAG 색인 및 임베딩은 백엔드 단계에서 연결됩니다.
+              문서 업로드/삭제 API가 아직 확정되지 않아 현재 화면에서는 목록만 비워서 표시합니다.
+              RAG 색인 및 임베딩 API가 확정되면 이 화면에 연결합니다.
             </p>
           </div>
         </div>
@@ -252,12 +266,12 @@ export function DocumentsPage() {
               />
             </Field>
           </div>
-          {/* Mock drop zone */}
+          {/* Upload drop zone placeholder */}
           <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-line-strong bg-surface-muted/40 px-4 py-6 text-center">
             <Upload className="mb-2 h-5 w-5 text-ink-400" />
             <p className="text-xs font-semibold text-ink-700">파일을 드래그하거나 클릭해 업로드</p>
             <p className="mt-1 text-[11px] text-ink-500">
-              PDF, DOCX, XLSX, CSV · 최대 20 MB (PoC mock)
+              PDF, DOCX, XLSX, CSV · 백엔드 문서 API 확정 후 활성화
             </p>
           </div>
           <button id="upload-form-submit" type="submit" className="hidden" />
@@ -284,7 +298,7 @@ export function DocumentsPage() {
       >
         <p className="text-sm leading-relaxed text-ink-700">
           <span className="font-semibold text-ink-900">{deleteTarget?.title}</span> 문서를 삭제합니다.
-          PoC에서는 mock 데이터에서만 제거됩니다.
+          백엔드 문서 삭제 API가 연결된 뒤 실제 삭제가 반영됩니다.
         </p>
       </Modal>
     </div>

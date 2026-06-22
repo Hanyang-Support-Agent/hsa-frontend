@@ -35,7 +35,7 @@ export function DevIntakePage() {
         orderId,
         message,
       });
-      showToast('Mock 문의를 생성했습니다.', 'success');
+      showToast('문의를 생성하고 AI 처리를 요청했습니다.', 'success');
       navigate(`/inquiries/${inquiry.id}`);
     } finally {
       setIsSubmitting(false);
@@ -50,8 +50,8 @@ export function DevIntakePage() {
             <TerminalSquare className="h-3 w-3" /> Development Tool
           </>
         }
-        title="문의 주입"
-        description="실제 채널 연동 전, 카카오·인스타·이메일 문의 수집과 분류 흐름을 mock으로 검증합니다."
+        title="문의 접수 테스트"
+        description="실제 채널 연동 전, 백엔드 문의 생성과 AI 처리 요청 흐름을 검증합니다."
       />
 
       {/* Dev warning strip */}
@@ -69,7 +69,7 @@ export function DevIntakePage() {
       </div>
 
       <div className="grid grid-cols-[1fr_340px] gap-5">
-        <Card title="Mock 문의 주입" description="채널과 본문을 입력해 문의를 생성하면 자동으로 상세 화면으로 이동합니다.">
+        <Card title="테스트 문의 접수" description="채널과 본문을 입력하면 백엔드에 문의를 생성하고 AI 처리를 요청한 뒤 상세 화면으로 이동합니다.">
           <form className="space-y-5" onSubmit={handleSubmit}>
             {/* Channel picker */}
             <Field label="채널">
@@ -117,7 +117,7 @@ export function DevIntakePage() {
 
             <Field
               label="주문번호"
-              hint="배송 문의 + 주문번호 조합 시 자동응답으로 처리됩니다."
+              hint="현재 백엔드 문의 생성 API는 주문번호를 받지 않아 참고용으로만 입력합니다."
             >
               <Input
                 placeholder="HSA-240427-01"
@@ -148,12 +148,12 @@ export function DevIntakePage() {
         </Card>
 
         <div className="space-y-4">
-          <Card title="분류 규칙" description="백엔드 AI 연결 전, UX 검증용 키워드 매칭" flush>
+          <Card title="백엔드 처리 흐름" description="문의 생성 후 백엔드가 AI 서버에 처리 요청을 전달합니다." flush>
             <ul className="divide-y divide-line">
-              <Rule label="배송" keywords="배송, 송장, 도착" tone="info" />
-              <Rule label="교환/환불" keywords="환불, 교환, 반품" tone="warn" />
-              <Rule label="상품" keywords="원단, 사이즈, 색상, 세탁" tone="success" />
-              <Rule label="기타" keywords="그 외 운영자 수동 확인" tone="neutral" />
+              <Rule label="1" keywords="POST /api/inquiries" tone="info" />
+              <Rule label="2" keywords="POST /api/inquiries/{id}/ai-processing" tone="warn" />
+              <Rule label="3" keywords="GET /api/admin/inquiries/{id}" tone="success" />
+              <Rule label="4" keywords="운영자 검토 · 수정 · 발송" tone="neutral" />
             </ul>
           </Card>
 
@@ -163,18 +163,10 @@ export function DevIntakePage() {
                 <Bot className="h-3.5 w-3.5" />
               </span>
               <div className="text-xs">
-                <p className="font-semibold text-ink-900">자동응답 조건</p>
+                <p className="font-semibold text-ink-900">AI 처리 연결</p>
                 <p className="mt-0.5 leading-relaxed text-ink-600">
-                  <span className="rounded bg-ink-100 px-1 font-mono text-[11px]">배송</span>{' '}
-                  유형 + 주문번호가 있으면{' '}
-                  <span className="rounded bg-brand-50 px-1 font-mono text-[11px] text-brand-700">
-                    auto_replied
-                  </span>
-                  , 그 외에는{' '}
-                  <span className="rounded bg-warn-50 px-1 font-mono text-[11px] text-warn-700">
-                    review_required
-                  </span>
-                  로 생성됩니다.
+                  문의 생성 직후 백엔드가 AI 처리 API를 호출하고, 저장된 결과를 상세 화면에서
+                  답변 초안으로 확인합니다. 프론트는 AI 서버를 직접 호출하지 않습니다.
                 </p>
               </div>
             </div>

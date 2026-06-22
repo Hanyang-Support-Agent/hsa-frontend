@@ -174,7 +174,7 @@ export function DashboardPage() {
                 검토 큐 열기 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link to="/dev/intake" className="inline-flex h-10 items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-4 text-sm font-semibold text-white transition hover:bg-white/[0.1]">
-                Mock 문의 주입
+                테스트 문의 접수
               </Link>
             </div>
           </div>

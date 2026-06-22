@@ -1,111 +1,168 @@
 # HSA Frontend
 
-고객문의 분류/답변 초안 에이전트의 **PoC 관리자 콘솔**이다.
-카카오톡·인스타그램·이메일로 들어온 고객 문의를 AI가 자동 분류하고, DB 조회 또는 RAG로 응답을 생성한 뒤 관리자가 검토·발송하는 흐름을 검증한다.
+HSA Frontend는 Hanyang Support Agent의 **AI 고객문의 운영 콘솔**입니다. 여러 채널에서 들어온 고객 문의를 백엔드와 AI 처리 파이프라인에 연결하고, 운영자가 분류 결과·답변 초안·처리 로그를 확인한 뒤 최종 답변을 검토/발송하는 흐름을 검증합니다.
 
----
+![HSA dashboard backend integration](docs/dashboard-backend-integration.png)
+
+## Highlights
+
+- **Backend-first console**: MSW 런타임과 샘플 데이터를 제거하고 Spring 백엔드 API를 기본 실행 경로로 사용합니다.
+- **운영자 중심 대시보드**: 문의 큐, 처리 단계, 운영 타임라인, 채널별 유입 현황을 한 화면에서 확인합니다.
+- **문의 처리 워크플로우**: 문의 생성 → AI 처리 요청 → 초안 조회 → 운영자 수정 → 확정/발송 흐름을 연결했습니다.
+- **백엔드 응답 어댑터**: Spring 공통 응답 래퍼(`isSuccess/code/message/result`)를 프론트 도메인 타입으로 변환합니다.
+- **계약 미확정 영역 분리**: 문서 관리와 인증은 임시 가짜 구현 대신 명시적인 “API 계약 대기” 상태로 둡니다.
 
 ## Tech Stack
 
 | 분류 | 사용 기술 |
 |---|---|
-| 프레임워크 | React 18 + Vite 6 + TypeScript 5.7 |
-| 스타일 | Tailwind CSS 3.4 + CSS 커스텀 토큰 |
-| 라우팅 | React Router 6 |
-| API 목킹 | MSW 2.6 (Mock Service Worker) |
-| 아이콘 | Lucide React |
+| Framework | React 18, Vite 6, TypeScript 5.7 |
+| Routing | React Router 6 |
+| Styling | Tailwind CSS 3.4, CSS Custom Properties |
+| Icons | Lucide React |
+| Integration | Vite Dev Proxy, Fetch API |
 
-> PoC이므로 실제 백엔드 없이 MSW가 모든 API 요청을 가로채 mock 데이터를 반환한다.
+## Architecture
 
----
-
-## 시스템 흐름
-
-```
-[고객 문의 유입]
-카카오톡 / 인스타그램 / 이메일
-        │
-        ▼ (PoC에서는 /dev/intake 로 수동 주입)
-[문의 수집 · 저장]  →  채널 / 고객 정보 / 문의 원문 / 접수 시각 기록
+```text
+Customer Channel
+Kakao / Instagram / Email
         │
         ▼
-[자동 분류]  →  배송 / 교환·환불 / 상품 / 기타
+Frontend Admin Console
+        │  /api/*
+        ▼
+Spring Backend
+        │  /api/inquiries/process
+        ▼
+AI Service
         │
-        ├─ DB 조회로 응답 가능? ─── YES ──▶ [자동응답 생성 · 발송]
-        │
-        └─ NO ──▶ [RAG 초안 생성]  →  정책/상품/FAQ 문서 검색
-                        │
-                        ▼
-              [관리자 검토 · 수정 · 발송]
-                        │
-                        ▼
-                  [로그 기록]
+        ▼
+DB / RAG / Processing Logs
 ```
 
----
+프론트엔드는 AI 서버를 직접 호출하지 않습니다. 브라우저에 AI 서버 주소, API key, 내부 처리 정책이 노출되지 않도록 **Frontend <-> Backend <-> AI** 방향으로 연결합니다.
 
-## 화면 및 라우트
+## Implemented Screens
 
-| 라우트 | 화면 | 설명 |
+| Route | Screen | Description |
 |---|---|---|
-| `/login` | 로그인 | mock 관리자 로그인 |
-| `/dashboard` | 대시보드 | 처리 현황 통계 카드(4종) + 최근 처리 로그 |
-| `/inquiries` | 문의 목록 | 채널 / 유형 / 상태 / 키워드 필터, 전체 문의 테이블 |
-| `/inquiries/:id` | 문의 상세 | 원문 확인, AI 초안 편집, 임시저장 / 발송 |
-| `/logs` | 로그 조회 | 문의 처리 이벤트 전체 이력, 키워드 검색 |
-| `/documents` | 문서 관리 | 정책·FAQ·상품 문서 등록·목록·삭제 |
-| `/dev/intake` | 문의 주입 (개발용) | 채널별 mock 문의 생성 → 전체 흐름 시뮬레이션 |
+| `/login` | 로그인 | 관리자 콘솔 진입 화면. 백엔드 인증 API 확정 전까지 로컬 운영자 세션 사용 |
+| `/dashboard` | 대시보드 | 문의 큐, 처리 단계, 최근 로그, 채널별 현황 요약 |
+| `/inquiries` | 문의 목록 | 채널/유형/상태/키워드 기반 문의 탐색 |
+| `/inquiries/:id` | 문의 상세 | 원문, AI 판단 결과, 초안 편집, 임시저장/발송 액션 |
+| `/logs` | 처리 기록 | 문의 처리 이벤트 타임라인 조회 |
+| `/documents` | 문서 관리 | RAG 문서 관리 화면. 백엔드 문서 API 계약 대기 |
+| `/dev/intake` | 문의 접수 테스트 | 개발용 문의 생성 및 AI 처리 트리거 |
 
----
+## Backend Integration Status
 
-## 문의 처리 상태
+프론트 개발 서버는 `/api/*` 요청을 `VITE_API_PROXY_TARGET`으로 프록시합니다. 브라우저 CORS 설정 없이 로컬 백엔드와 통합 테스트할 수 있습니다.
 
-| 상태값 | 표시명 | 설명 |
+| Frontend Feature | Backend API | Status |
 |---|---|---|
-| `received` | 접수됨 | 문의 수집 직후 |
-| `classified` | 분류 완료 | AI 유형 분류 완료 |
-| `auto_replied` | 자동응답 완료 | DB 조회로 즉시 발송됨 |
-| `draft_ready` | 초안 생성 완료 | RAG 초안이 준비됨 |
-| `review_required` | 관리자 검토 필요 | 복합 문의 등 수동 처리 필요 |
-| `saved` | 임시저장됨 | 관리자가 초안을 저장한 상태 |
-| `sent` | 발송 완료 | 최종 응답 발송됨 |
-| `failed` | 처리 실패 | 오류 발생 |
+| 문의 목록 조회 | `GET /api/admin/inquiries` | Connected |
+| 문의 상세 조회 | `GET /api/admin/inquiries/{id}` | Connected |
+| 개발용 문의 생성 | `POST /api/inquiries` | Connected |
+| AI 처리 요청 | `POST /api/inquiries/{id}/ai-processing` | Connected |
+| 답변 임시저장 | `PATCH /api/admin/responses/{responseId}` | Connected |
+| 답변 최종 확정 | `PATCH /api/admin/responses/{responseId}/confirm` | Connected |
+| 답변 발송 | `POST /api/admin/responses/{responseId}/send` | Connected |
+| 문의별 처리 로그 | `GET /api/admin/inquiries/{id}/logs` | Connected |
+| 문서 관리 | - | Backend contract needed |
+| 인증 세션 | - | Backend contract needed |
 
----
+### Local Integration Evidence
 
-## 개발 명령어
+로컬에서 다음 구성을 띄워 통합 흐름을 확인했습니다.
+
+```text
+Frontend  : http://127.0.0.1:5173
+Backend   : http://127.0.0.1:8080
+AI stub   : http://127.0.0.1:8000
+Database  : H2 in-memory test DB
+```
+
+검증한 흐름:
+
+1. 프론트가 백엔드 API 엔드포인트로 실행됩니다.
+2. 백엔드에 문의를 생성합니다.
+3. 백엔드가 AI 처리 API를 호출합니다.
+4. AI stub이 `/api/inquiries/process`에 `200 OK`로 응답합니다.
+5. 백엔드가 AI 결과와 답변 초안을 저장합니다.
+6. 프론트 대시보드와 문의 상세 화면에서 백엔드 데이터를 조회합니다.
+7. 답변 수정, 확정, 발송 API를 호출합니다.
+
+## Run Locally
+
+### 1. Install dependencies
 
 ```bash
-npm install       # 의존성 설치
-npm run dev       # 개발 서버 시작 (Vite, MSW 자동 활성화)
-npm run build     # 프로덕션 빌드
-npm run lint      # ESLint 검사
-npm run preview   # 프로덕션 빌드 미리보기
+npm install
 ```
 
-> `npm run dev` 실행 시 MSW Service Worker가 자동으로 등록되어 `/api/*` 요청을 mock 핸들러가 처리한다. 브라우저 콘솔에 `[MSW] Mocking enabled` 로그가 뜨면 정상.
+### 2. Configure backend target
 
----
-
-## 프로젝트 구조
-
-```
-src/
-├── components/       # 공통 UI (Button, Badge, Table, Modal, Toast 등)
-├── layouts/          # AppShell (사이드바 + 탑바)
-├── pages/            # 화면별 컴포넌트
-├── mocks/            # MSW 핸들러 + mock 데이터
-├── lib/              # api 클라이언트, 날짜/텍스트 포맷 유틸
-├── types/            # domain.ts (Inquiry, Document, LogEvent 등 핵심 타입)
-└── styles/           # CSS 커스텀 토큰
+```bash
+cp .env.example .env.local
 ```
 
----
+`.env.local`:
 
-## 문서
+```env
+VITE_API_PROXY_TARGET=http://127.0.0.1:8080
+VITE_API_BASE_URL=
+VITE_ADMIN_ID=1
+VITE_CHANNEL_ID=1
+VITE_TEST_CUSTOMER_ID=1
+```
 
-| 문서 | 경로 | 내용 |
+### 3. Start frontend
+
+```bash
+npm run dev
+```
+
+Vite dev server proxies `/api/*` to `VITE_API_PROXY_TARGET`.
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start Vite development server |
+| `npm run build` | Type-check and build production bundle |
+| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview production build |
+
+## Domain States
+
+| Frontend Status | Label | Meaning |
 |---|---|---|
-| 기능명세서 | `feature-spec.md` | 기능 ID별 상세 명세, 우선순위, 화면 기준 정리 |
-| 레이아웃 와이어프레임 | `hsa_admin_layout.md` | 화면별 텍스트 아트 와이어프레임 |
-| Figma 설계 계획 | `docs/figma-design-plan.md` | 디자인 시스템 기초 + Figma 제작 순서 |
+| `received` | 접수 | 문의 수집 직후 |
+| `classified` | 분류완료 | AI 유형 분류 완료 |
+| `auto_replied` | 자동응답 | DB 조회로 즉시 발송됨 |
+| `draft_ready` | 초안완료 | AI/RAG 초안 준비 완료 |
+| `review_required` | 승인필요 | 운영자 검토 필요 |
+| `saved` | 임시저장 | 운영자가 최종 답변을 저장한 상태 |
+| `sent` | 발송완료 | 최종 답변 발송 완료 |
+| `failed` | 실패 | 처리 실패 |
+
+## Project Structure
+
+```text
+src/
+├── components/       # Shared UI: Button, Badge, Table, Modal, Toast, etc.
+├── layouts/          # AppShell navigation and top bar
+├── pages/            # Route-level screens
+├── lib/              # API client, formatters, metadata helpers
+├── types/            # Domain types and labels
+└── styles/           # Global styles and design tokens
+```
+
+## Related Documents
+
+| Document | Path | Description |
+|---|---|---|
+| Feature Spec | `feature-spec.md` | 기능 ID별 상세 명세와 우선순위 |
+| Wireframe | `hsa_admin_layout.md` | 화면별 텍스트 와이어프레임 |
+| Figma Plan | `docs/figma-design-plan.md` | 디자인 시스템 및 Figma 제작 계획 |

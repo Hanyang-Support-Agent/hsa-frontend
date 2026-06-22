@@ -240,7 +240,7 @@ export function InquiriesPage() {
             <EmptyState
               compact
               title="조건에 맞는 문의가 없어요"
-              description="필터를 초기화하거나 DEV 수집함에서 mock 문의를 추가해 보세요."
+              description="필터를 초기화하거나 문의 접수 테스트 화면에서 새 문의를 생성해 보세요."
             />
           </div>
         ) : (

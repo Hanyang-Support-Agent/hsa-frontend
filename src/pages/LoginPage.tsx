@@ -96,7 +96,7 @@ export function LoginPage({ session, onLogin }: { session: Session; onLogin: () 
           </p>
           <h2 className="mt-2 text-h1 text-ink-900">콘솔 입장</h2>
           <p className="mt-2 text-sm leading-relaxed text-ink-500">
-            현재는 mock 인증이 활성화되어 있어 그대로 입장할 수 있습니다.
+            백엔드 인증 API 확정 전까지 로컬 운영자 세션으로 콘솔에 입장합니다.
           </p>
 
           <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
@@ -104,7 +104,7 @@ export function LoginPage({ session, onLogin }: { session: Session; onLogin: () 
               <Input defaultValue="admin@hsa.local" readOnly />
             </Field>
             <Field label="비밀번호">
-              <Input defaultValue="mock-password" type="password" readOnly />
+              <Input defaultValue="local-session" type="password" readOnly />
             </Field>
             <Button
               size="lg"

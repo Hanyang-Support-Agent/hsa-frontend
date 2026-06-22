@@ -46,11 +46,17 @@ export function AppShell({ session, onLogout }: { session: Session; onLogout: ()
   const navigate = useNavigate();
   const location = useLocation();
 
+  const environmentLabel = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_PROXY_TARGET || 'Backend API';
   useEffect(() => {
     let mounted = true;
-    void api.listInquiries().then((data) => {
-      if (mounted) setInquiries(data);
-    });
+    void api
+      .listInquiries()
+      .then((data) => {
+        if (mounted) setInquiries(data);
+      })
+      .catch(() => {
+        if (mounted) setInquiries([]);
+      });
     return () => {
       mounted = false;
     };
@@ -168,9 +174,9 @@ export function AppShell({ session, onLogout }: { session: Session; onLogout: ()
               <h1 className="text-[17px] font-bold text-ink-900">{pageTitle}</h1>
             </div>
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-8 items-center gap-2 rounded-full border border-brand-100 bg-brand-50 px-3 text-xs font-semibold text-brand-800 shadow-xs">
-                <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-brand-500" />
-                MSW Mock Mode
+              <span className="inline-flex h-8 items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 text-xs font-semibold text-emerald-800 shadow-xs">
+                <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-emerald-500" />
+                {environmentLabel}
               </span>
               <span className="hidden h-8 items-center rounded-full border border-line bg-white/80 px-3 text-xs font-medium text-ink-600 shadow-xs lg:inline-flex">
                 운영자: {adminName}
@@ -250,6 +256,6 @@ function getPageTitle(pathname: string) {
   if (pathname.startsWith('/inquiries')) return '문의 처리함';
   if (pathname.startsWith('/logs')) return '처리 기록';
   if (pathname.startsWith('/documents')) return '지식 문서';
-  if (pathname.startsWith('/dev/intake')) return 'Mock 문의 주입';
+  if (pathname.startsWith('/dev/intake')) return '문의 접수 테스트';
   return '운영 대시보드';
 }
